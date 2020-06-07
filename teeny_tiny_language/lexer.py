@@ -33,6 +33,11 @@ class Lexer:
             while self.current_char != "\n" and self.current_char != "\0":
                 self.next_char()
 
+    def is_valid_string_character(self, char: str) -> bool:
+        if char == "\n" or char == "\r" or char == "\t" or char == "\\" or char == "%":
+            return False
+        return True
+
     def abort(self, message: str) -> None:
         raise LexerError(f"Lexer error: {message}")
 
@@ -74,10 +79,20 @@ class Lexer:
                 self.next_char()
             else:
                 token = Token(TokenType.LT, "<")
+        elif self.current_char == '"':
+            # +1 to avoid including the quotation marks
+            start_pos = self.current_pos + 1
+            self.next_char()
+            while self.current_char != '"':
+                if not self.is_valid_string_character(self.current_char):
+                    self.abort(f"Invalid character {self.current_char} found in string.")
+                self.next_char()
+            token = Token(TokenType.STRING, self.input[start_pos:self.current_pos])
         elif self.current_char == "\n":
             token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
             token = Token(TokenType.EOF, "")
+
         self.next_char()
         return token
 
