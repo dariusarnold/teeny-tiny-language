@@ -45,3 +45,52 @@ def test_break(capsys):
     with pytest.raises(ParserError):
         p.program()
 
+
+def test_expression(capsys):
+    input = "LET foo = bar * 3 + 2\n"
+    p = Parser(input)
+    p.program()
+    out, err = capsys.readouterr()
+    out = out.replace("\n", "")
+    assert out == "".join(("PROGRAM", "STATEMENT-LET", "EXPRESSION", "TERM", "UNARY",
+                           "PRIMARY (bar)", "UNARY", "PRIMARY (3)", "TERM", "UNARY", "PRIMARY (2)",
+                           "NEWLINE"))
+
+def test_expression_with_if(capsys):
+    input = """\
+LET foo = bar * 3 + 2
+IF foo > 0 THEN
+  PRINT "yes!"
+ENDIF
+"""
+    expected_output = """PROGRAM
+STATEMENT-LET
+EXPRESSION
+TERM
+UNARY
+PRIMARY (bar)
+UNARY
+PRIMARY (3)
+TERM
+UNARY
+PRIMARY (2)
+NEWLINE
+STATEMENT-IF
+COMPARISON
+EXPRESSION
+TERM
+UNARY
+PRIMARY (foo)
+EXPRESSION
+TERM
+UNARY
+PRIMARY (0)
+NEWLINE
+STATEMENT-PRINT
+NEWLINE
+NEWLINE
+"""
+    p = Parser(input)
+    p.program()
+    out, err = capsys.readouterr()
+    assert out == expected_output
