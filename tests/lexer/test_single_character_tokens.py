@@ -1,5 +1,20 @@
+import pytest
+
 from teeny_tiny_language.lexer import Lexer
-from teeny_tiny_language.token import TokenType
+from teeny_tiny_language.token import TokenType, Token
+
+SINGLE_CHARACTER_TOKENS = [Token(TokenType.EQ, "="), Token(TokenType.PLUS, "+"),
+                           Token(TokenType.MINUS, "-"),
+                           Token(TokenType.ASTERISK, "*"),
+                           Token(TokenType.SLASH, "/"),
+                           Token(TokenType.NEWLINE, "\n")]
+
+
+@pytest.mark.parametrize("input_token",
+                         SINGLE_CHARACTER_TOKENS)
+def test_single_character_token(input_token):
+    l = Lexer(input_token.text)
+    assert l.get_token() == input_token
 
 
 def test_single_character_tokens_type():

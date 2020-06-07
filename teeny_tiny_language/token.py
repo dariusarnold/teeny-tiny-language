@@ -38,3 +38,9 @@ class Token:
     def __init__(self, type: TokenType, text: str) -> None:
         self.type = type
         self.text = text
+
+    def __repr__(self):
+        return f"Token({self.type.name}, {self.text})"
+
+    def __eq__(self, other: "Token") -> bool:
+        return self.type == other.type and self.text == other.text
