@@ -132,6 +132,7 @@ class Parser:
 
     # primary ::= number | ident
     def primary(self) -> None:
+        print(f"PRIMARY ({self.current_token.text})")
         if self.check_token(TokenType.NUMBER):
             self.next_token()
         elif self.check_token(TokenType.IDENT):
