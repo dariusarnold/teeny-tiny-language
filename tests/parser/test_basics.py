@@ -30,6 +30,11 @@ def test_match_aborting():
         p.match(TokenType.EOF)
 
 
+def test_match_success():
+    p = Parser("LET a = 1")
+    assert p.match(TokenType.LET)
+
+
 def test_check_token_success():
     p = Parser("LET")
     assert p.check_token(TokenType.LET)

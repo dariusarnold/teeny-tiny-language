@@ -20,10 +20,11 @@ class Parser:
     def check_peek(self, kind: TokenType) -> bool:
         return self.peek_token.type == kind
 
-    def match(self, kind: TokenType) -> None:
+    def match(self, kind: TokenType) -> bool:
         if not self.check_token(kind):
             self.abort(f"Invalid token type {self.current_token.type}, expected {kind}")
         self.next_token()
+        return True
 
     def next_token(self) -> None:
         self.current_token = self.peek_token
