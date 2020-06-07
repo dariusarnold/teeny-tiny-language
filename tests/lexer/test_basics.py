@@ -51,18 +51,14 @@ def test_indentation_smoketest():
         ENDWHILE
         """
     l = Lexer(input)
-    expected_tokens = [Token(TokenType.WHILE, "WHILE"),
-                       Token(TokenType.IDENT, "a"), Token(TokenType.LT, "<"),
-                       Token(TokenType.NUMBER, "3"),
-                       Token(TokenType.REPEAT, "REPEAT"),
-                       Token(TokenType.NEWLINE, "\n"),
-                       Token(TokenType.PRINT, "PRINT"),
-                       Token(TokenType.IDENT, "a"),
-                       Token(TokenType.NEWLINE, "\n"),
-                       Token(TokenType.LET, "LET"), Token(TokenType.IDENT, "a"),
-                       Token(TokenType.EQ, "="), Token(TokenType.IDENT, "a"),
-                       Token(TokenType.PLUS, "+"), Token(TokenType.NUMBER, "1"),
-                       Token(TokenType.NEWLINE, "\n"),
+    expected_tokens = [Token(TokenType.WHILE, "WHILE"), Token(TokenType.IDENT, "a"),
+                       Token(TokenType.LT, "<"), Token(TokenType.NUMBER, "3"),
+                       Token(TokenType.REPEAT, "REPEAT"), Token(TokenType.NEWLINE, "\n"),
+                       Token(TokenType.PRINT, "PRINT"), Token(TokenType.IDENT, "a"),
+                       Token(TokenType.NEWLINE, "\n"), Token(TokenType.LET, "LET"),
+                       Token(TokenType.IDENT, "a"), Token(TokenType.EQ, "="),
+                       Token(TokenType.IDENT, "a"), Token(TokenType.PLUS, "+"),
+                       Token(TokenType.NUMBER, "1"), Token(TokenType.NEWLINE, "\n"),
                        Token(TokenType.ENDWHILE, "ENDWHILE")]
     for expected_token in expected_tokens:
         assert l.get_token() == expected_token

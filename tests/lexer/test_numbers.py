@@ -53,10 +53,8 @@ def test_number_smoketest():
     input = "+-123 9.8654*222/"
     l = Lexer(input)
     expected_tokens = [Token(TokenType.PLUS, "+"), Token(TokenType.MINUS, "-"),
-                       Token(TokenType.NUMBER, "123"),
-                       Token(TokenType.NUMBER, "9.8654"),
-                       Token(TokenType.ASTERISK, "*"),
-                       Token(TokenType.NUMBER, "222"),
+                       Token(TokenType.NUMBER, "123"), Token(TokenType.NUMBER, "9.8654"),
+                       Token(TokenType.ASTERISK, "*"), Token(TokenType.NUMBER, "222"),
                        Token(TokenType.SLASH, "/")]
     for expected_token in expected_tokens:
         assert l.get_token() == expected_token

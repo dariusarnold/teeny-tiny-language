@@ -21,11 +21,8 @@ def test_keyword_smoketest():
     input = "IF+-123 foo*THEN/"
     l = Lexer(input)
     expected_tokens = [Token(TokenType.IF, "IF"), Token(TokenType.PLUS, "+"),
-                       Token(TokenType.MINUS, "-"),
-                       Token(TokenType.NUMBER, "123"),
-                       Token(TokenType.IDENT, "foo"),
-                       Token(TokenType.ASTERISK, "*"),
-                       Token(TokenType.THEN, "THEN"),
-                       Token(TokenType.SLASH, "/")]
+                       Token(TokenType.MINUS, "-"), Token(TokenType.NUMBER, "123"),
+                       Token(TokenType.IDENT, "foo"), Token(TokenType.ASTERISK, "*"),
+                       Token(TokenType.THEN, "THEN"), Token(TokenType.SLASH, "/")]
     for expected_token in expected_tokens:
         assert l.get_token() == expected_token
