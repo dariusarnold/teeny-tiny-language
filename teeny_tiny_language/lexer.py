@@ -9,6 +9,9 @@ class LexerError(Exception):
     pass
 
 
+VALID_KEYWORDS = [t.name for t in TokenType if 100 < t.value < 200]
+
+
 class Lexer:
 
     def __init__(self, input: str) -> None:
@@ -37,6 +40,9 @@ class Lexer:
         if char == "\n" or char == "\r" or char == "\t" or char == "\\" or char == "%":
             return False
         return True
+
+    def is_keyword(self, text: str) -> bool:
+        return text in VALID_KEYWORDS
 
     def abort(self, message: str) -> None:
         raise LexerError(f"Lexer error: {message}")
@@ -110,6 +116,15 @@ class Lexer:
                               self.input[start_pos:self.current_pos + 1])
         elif self.current_char == ".":
             self.abort("Missing leading digit for number")
+        elif self.current_char.isalpha():
+            start_pos = self.current_pos
+            while self.peek().isalnum():
+                self.next_char()
+            token_text = self.input[start_pos:self.current_pos + 1]
+            if self.is_keyword(token_text):
+                pass
+            else:
+                token = Token(TokenType.IDENT, token_text)
         elif self.current_char == "\n":
             token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
