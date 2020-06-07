@@ -57,7 +57,7 @@ class Parser:
             else:
                 self.expression()
         elif self.check_token(TokenType.IF):
-            print("STATEMENT-PRINT")
+            print("STATEMENT-IF")
             self.next_token()
             self.comparison()
             self.match(TokenType.THEN)
