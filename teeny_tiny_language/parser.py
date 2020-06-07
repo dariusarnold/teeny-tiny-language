@@ -32,3 +32,28 @@ class Parser:
 
     def abort(self, message: str) -> None:
         raise ParserError(f"Parser error: {message}")
+
+    # Production rules
+
+    # program ::= {statement}
+    def program(self) -> None:
+        print("PROGRAM")
+        while not self.check_token(TokenType.EOF):
+            self.statement()
+
+    # statement::= "PRINT" (expression | string) newline
+    def statement(self) -> None:
+        if self.match(TokenType.PRINT):
+            print("STATEMENT-PRINT")
+            if self.check_token(TokenType.STRING):
+                self.next_token()
+            else:
+                self.expression()
+        self.newline()
+
+    # newline ::= "\n"+
+    def newline(self):
+        print("NEWLINE")
+        self.match(TokenType.NEWLINE)
+        while (self.check_token(TokenType.NEWLINE)):
+            self.next_token()
