@@ -12,6 +12,11 @@ def test_single_keyword_lexing(keyword_token: TokenType):
     assert l.get_token() == Token(keyword_token, keyword_token.name)
 
 
+def test_greedy_lexing():
+    l = Lexer("IF12THEN")
+    assert l.get_token() == Token(TokenType.IDENT, "IF12THEN")
+
+
 def test_keyword_smoketest():
     input = "IF+-123 foo*THEN/"
     l = Lexer(input)
