@@ -12,6 +12,13 @@ def test_empty_peek():
     assert l.peek() == "\0"
 
 
+def test_peek_not_changing_state():
+    l = Lexer("+-*")
+    assert l.current_char == "+"
+    l.peek()
+    assert l.current_char == "+"
+
+
 def test_single_newline_token():
     l = Lexer("\n")
     assert l.get_token().type == TokenType.NEWLINE
