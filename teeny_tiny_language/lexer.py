@@ -104,10 +104,10 @@ class Lexer:
                           self.input[start_pos:self.current_pos])
         elif self.current_char.isdigit():
             start_pos = self.current_pos
-            self.next_char()
             while self.peek().isdigit():
                 self.next_char()
-            if self.current_char == ".":
+            if self.peek() == ".":
+                self.next_char()
                 if not self.peek().isdigit():
                     self.abort(f"Got invalid character after . ({self.peek()})")
                 self.next_char()

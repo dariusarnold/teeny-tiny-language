@@ -9,6 +9,12 @@ def test_digit():
     assert l.get_token() == Token(TokenType.NUMBER, "0")
 
 
+def test_digit_following_space_should_ne_be_included():
+    l = Lexer("3 a")
+    assert l.get_token() == Token(TokenType.NUMBER, "3")
+    assert l.get_token() == Token(TokenType.IDENT, "a")
+
+
 def test_integer():
     l = Lexer("42")
     assert l.get_token() == Token(TokenType.NUMBER, "42")
