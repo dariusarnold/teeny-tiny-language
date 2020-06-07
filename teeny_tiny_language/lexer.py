@@ -28,11 +28,17 @@ class Lexer:
         while is_space(self.current_char):
             self.next_char()
 
+    def skip_comment(self) -> None:
+        if self.current_char == "#":
+            while self.current_char != "\n" and self.current_char != "\0":
+                self.next_char()
+
     def abort(self, message: str) -> None:
         raise LexerError(f"Lexer error: {message}")
 
     def get_token(self) -> Token:
         self.skip_whitespace()
+        self.skip_comment()
         if self.current_char == "+":
             token = Token(TokenType.PLUS, self.current_char)
         elif self.current_char == "-":
