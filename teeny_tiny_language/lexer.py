@@ -5,6 +5,10 @@ def is_space(char: str) -> bool:
     return char == " " or char == "\t" or char == "\r"
 
 
+class LexerError(Exception):
+    pass
+
+
 class Lexer:
 
     def __init__(self, input: str) -> None:
@@ -24,6 +28,9 @@ class Lexer:
         while is_space(self.current_char):
             self.next_char()
 
+    def abort(self, message: str) -> None:
+        raise LexerError(f"Lexer error: {message}")
+
     def get_token(self) -> Token:
         self.skip_whitespace()
         if self.current_char == "+":
@@ -34,6 +41,33 @@ class Lexer:
             token = Token(TokenType.ASTERISK, self.current_char)
         elif self.current_char == "/":
             token = Token(TokenType.SLASH, self.current_char)
+        elif self.current_char == "=":
+            # check if = or ==
+            if self.peek() == "=":
+                token = Token(TokenType.EQEQ, "==")
+                self.next_char()
+            else:
+                token = Token(TokenType.EQ, "=")
+        elif self.current_char == "!":
+            if self.peek() == "=":
+                token = Token(TokenType.NOTEQ, "!=")
+                self.next_char()
+            else:
+                self.abort(f"Got invalid token after ! (Token is {self.peek()})")
+        elif self.current_char == ">":
+            # check if > or >=
+            if self.peek() == "=":
+                token = Token(TokenType.GTEQ, ">=")
+                self.next_char()
+            else:
+                token = Token(TokenType.GT, ">")
+        elif self.current_char == "<":
+            # check if < or <=
+            if self.peek() == "=":
+                token = Token(TokenType.LTEQ, "<=")
+                self.next_char()
+            else:
+                token = Token(TokenType.LT, "<")
         elif self.current_char == "\n":
             token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
