@@ -55,6 +55,7 @@ class Lexer:
     def get_token(self) -> Token:
         self.skip_whitespace()
         self.skip_comment()
+        token = None
         if self.current_char == "+":
             token = Token(TokenType.PLUS, self.current_char)
         elif self.current_char == "-":
@@ -135,6 +136,9 @@ class Lexer:
             token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
             token = Token(TokenType.EOF, "")
+
+        if token is None:
+            self.abort(f"Lexing error: Unknown token {self.current_char}")
 
         self.next_char()
         return token
