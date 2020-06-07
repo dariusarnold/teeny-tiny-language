@@ -65,6 +65,23 @@ class Parser:
             while not self.check_token(TokenType.ENDIF):
                 self.statement()
             self.match(TokenType.ENDIF)
+        elif self.check_token(TokenType.WHILE):
+            print("STATEMENT-WHILE")
+            self.next_token()
+            self.comparison()
+            self.match(TokenType.REPEAT)
+            while not self.check_token(TokenType.ENDWHILE):
+                self.statement()
+            self.match(TokenType.ENDWHILE)
+        elif self.check_token(TokenType.LABEL):
+            print("STATEMENT-LABEL")
+            self.next_token()
+            self.match(TokenType.IDENT)
+        elif self.check_token(TokenType.GOTO):
+            print("STATEMENT-GOTO")
+            self.next_token()
+            self.match(TokenType.IDENT)
+
         self.newline()
 
     # comparison ::= expression("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
