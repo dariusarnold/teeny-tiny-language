@@ -1,3 +1,5 @@
+from typing import Optional, List
+
 from teeny_tiny_language.token import Token, TokenType
 
 
@@ -9,7 +11,7 @@ class LexerError(Exception):
     pass
 
 
-VALID_KEYWORDS = [t.name for t in TokenType if 100 < t.value < 200]
+VALID_KEYWORDS: List[TokenType] = [t for t in TokenType if 100 < t.value < 200]
 
 
 class Lexer:
@@ -41,8 +43,11 @@ class Lexer:
             return False
         return True
 
-    def is_keyword(self, text: str) -> bool:
-        return text in VALID_KEYWORDS
+    def is_keyword(self, text: str) -> Optional[TokenType]:
+        for keyword in VALID_KEYWORDS:
+            if text == keyword.name:
+                return keyword
+        return None
 
     def abort(self, message: str) -> None:
         raise LexerError(f"Lexer error: {message}")
@@ -121,8 +126,9 @@ class Lexer:
             while self.peek().isalnum():
                 self.next_char()
             token_text = self.input[start_pos:self.current_pos + 1]
-            if self.is_keyword(token_text):
-                pass
+            keyword = self.is_keyword(token_text)
+            if keyword:
+                token = Token(keyword, token_text)
             else:
                 token = Token(TokenType.IDENT, token_text)
         elif self.current_char == "\n":
