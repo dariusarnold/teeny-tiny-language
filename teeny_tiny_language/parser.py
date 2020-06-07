@@ -81,7 +81,19 @@ class Parser:
             print("STATEMENT-GOTO")
             self.next_token()
             self.match(TokenType.IDENT)
-
+        elif self.check_token(TokenType.LET):
+            print("STATEMENT-LET")
+            self.next_token()
+            self.match(TokenType.IDENT)
+            self.match(TokenType.EQ)
+            self.expression()
+        elif self.check_token(TokenType.INPUT):
+            print("STATEMENT-INPUT")
+            self.next_token()
+            self.match(TokenType.IDENT)
+        else:
+            self.abort(
+                f"Invalid statement at {self.current_token.text}: {self.current_token.type.name}")
         self.newline()
 
     # comparison ::= expression("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
@@ -125,7 +137,7 @@ class Parser:
         elif self.check_token(TokenType.IDENT):
             self.next_token()
         else:
-            self.abort(f"Unexpected token {self.current_token.text}")
+            self.abort(f"Unexpected token {self.current_token.name}")
 
     # newline ::= "\n"+
     def newline(self) -> None:

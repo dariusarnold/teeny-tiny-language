@@ -1,4 +1,6 @@
-from teeny_tiny_language.parser import Parser
+import pytest
+
+from teeny_tiny_language.parser import Parser, ParserError
 
 
 def test_print_hello_world(capsys):
@@ -35,3 +37,11 @@ GOTO loop
     out = out.replace("\n", "")
     assert out == "".join(("PROGRAM", "STATEMENT-LABEL", "NEWLINE", "STATEMENT-PRINT", "NEWLINE",
                            "STATEMENT-GOTO", "NEWLINE"))
+
+
+def test_break(capsys):
+    input = "JUMP GOTO\n"
+    p = Parser(input)
+    with pytest.raises(ParserError):
+        p.program()
+
