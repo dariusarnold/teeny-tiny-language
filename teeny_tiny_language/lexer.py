@@ -64,7 +64,8 @@ class Lexer:
                 token = Token(TokenType.NOTEQ, "!=")
                 self.next_char()
             else:
-                self.abort(f"Got invalid token after ! (Token is {self.peek()})")
+                self.abort(
+                    f"Got invalid token after ! (Token is {self.peek()})")
         elif self.current_char == ">":
             # check if > or >=
             if self.peek() == "=":
@@ -85,9 +86,30 @@ class Lexer:
             self.next_char()
             while self.current_char != '"':
                 if not self.is_valid_string_character(self.current_char):
-                    self.abort(f"Invalid character {self.current_char} found in string.")
+                    self.abort(
+                        f"Invalid character {self.current_char} found in string.")
                 self.next_char()
-            token = Token(TokenType.STRING, self.input[start_pos:self.current_pos])
+            token = Token(TokenType.STRING,
+                          self.input[start_pos:self.current_pos])
+        elif self.current_char.isdigit():
+            start_pos = self.current_pos
+            self.next_char()
+            while self.peek().isdigit():
+                self.next_char()
+            if self.current_char == ".":
+                if not self.peek().isdigit():
+                    self.abort(f"Got invalid character after . ({self.peek()})")
+                self.next_char()
+                while self.peek().isdigit():
+                    self.next_char()
+                # since we only peeked at the next digit to not consume a token following after the
+                # last digit of the number, we have to +1 here to include last digit
+                token = Token(TokenType.NUMBER, self.input[start_pos:self.current_pos + 1])
+            else:
+                token = Token(TokenType.NUMBER,
+                              self.input[start_pos:self.current_pos + 1])
+        elif self.current_char == ".":
+            self.abort("Missing leading digit for number")
         elif self.current_char == "\n":
             token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
