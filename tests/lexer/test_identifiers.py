@@ -1,5 +1,5 @@
 from teeny_tiny_language.lexer import Lexer
-from teeny_tiny_language.token import Token, TokenType
+from teeny_tiny_language.tokens import Token, TokenType
 
 
 def test_single_identifier_alpha_only():

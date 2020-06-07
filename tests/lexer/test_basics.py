@@ -1,5 +1,5 @@
 from teeny_tiny_language.lexer import Lexer
-from teeny_tiny_language.token import TokenType, Token
+from teeny_tiny_language.tokens import TokenType, Token
 
 
 def test_tokentype_comparison():

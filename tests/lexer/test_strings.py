@@ -1,7 +1,7 @@
 import pytest
 
 from teeny_tiny_language.lexer import Lexer, LexerError
-from teeny_tiny_language.token import Token, TokenType
+from teeny_tiny_language.tokens import Token, TokenType
 
 
 def test_single_string():

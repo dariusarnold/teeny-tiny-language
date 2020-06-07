@@ -1,7 +1,7 @@
 import pytest
 
 from teeny_tiny_language.lexer import Lexer, LexerError
-from teeny_tiny_language.token import TokenType, Token
+from teeny_tiny_language.tokens import TokenType, Token
 
 TWO_CHARACTER_TOKENS = [Token(TokenType.EQEQ, "=="),
                         Token(TokenType.NOTEQ, "!="),

@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from teeny_tiny_language.token import Token, TokenType
+from teeny_tiny_language.tokens import Token, TokenType
 
 
 def is_space(char: str) -> bool:

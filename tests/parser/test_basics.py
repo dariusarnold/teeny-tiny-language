@@ -1,7 +1,7 @@
 import pytest
 
 from teeny_tiny_language.parser import Parser, ParserError
-from teeny_tiny_language.token import TokenType, Token
+from teeny_tiny_language.tokens import TokenType, Token
 
 
 def test_empty_input_eof():

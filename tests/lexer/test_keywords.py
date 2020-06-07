@@ -1,7 +1,7 @@
 import pytest
 
 from teeny_tiny_language.lexer import Lexer
-from teeny_tiny_language.token import TokenType, Token
+from teeny_tiny_language.tokens import TokenType, Token
 
 KEYWORD_TOKENS = [t for t in TokenType if 100 < t.value < 200]
 
