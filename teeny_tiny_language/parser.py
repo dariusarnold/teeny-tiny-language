@@ -6,10 +6,16 @@ class ParserError(Exception):
     pass
 
 
+def is_comparison_operator(token: Token) -> bool:
+    return token.type in (TokenType.EQEQ, TokenType.NOTEQ, TokenType.GT, TokenType.GTEQ,
+                          TokenType.LT, TokenType.LTEQ)
+
+
 class Parser:
 
-    def __init__(self, input: str):
+    def __init__(self, input: str, verbose: bool = True):
         self.lexer = Lexer(input)
+        self.verbose = verbose
 
         self.current_token: Token = self.lexer.get_token()
         self.peek_token: Token = self.lexer.get_token()
@@ -49,10 +55,60 @@ class Parser:
                 self.next_token()
             else:
                 self.expression()
+        elif self.match(TokenType.IF):
+            self.comparison()
+            self.match(TokenType.THEN)
+            self.newline()
+            self.statement()
+            self.match(TokenType.ENDIF)
+            self.newline()
         self.newline()
 
+    # comparison ::= expression("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
+    def comparison(self) -> None:
+        print("COMPARISON")
+        self.expression()
+        if is_comparison_operator(self.current_token):
+            self.next_token()
+            self.expression()
+        while is_comparison_operator(self.current_token):
+            self.next_token()
+            self.expression()
+
+    # expression ::= term {("-" | "+") term}
+    def expression(self) -> None:
+        print("EXPRESSION")
+        self.term()
+        while self.check_token(TokenType.PLUS) or self.check_token(TokenType.MINUS):
+            self.next_token()
+            self.term()
+
+    # term ::= unary {( "/" | "*" ) unary }
+    def term(self) -> None:
+        print("TERM")
+        self.unary()
+        if self.check_token(TokenType.SLASH) or self.check_token(TokenType.ASTERISK):
+            self.next_token()
+            self.unary()
+
+    # unary ::= ["+" | "-"] primary
+    def unary(self) -> None:
+        print("UNARY")
+        if self.check_token(TokenType.PLUS) or self.check_token(TokenType.MINUS):
+            self.next_token()
+        self.primary()
+
+    # primary ::= number | ident
+    def primary(self) -> None:
+        if self.check_token(TokenType.NUMBER):
+            self.next_token()
+        if self.check_token(TokenType.IDENT):
+            self.next_token()
+        else:
+            self.abort(f"Unexpected token {self.current_token.text}")
+
     # newline ::= "\n"+
-    def newline(self):
+    def newline(self) -> None:
         print("NEWLINE")
         self.match(TokenType.NEWLINE)
         while (self.check_token(TokenType.NEWLINE)):
