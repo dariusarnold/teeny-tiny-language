@@ -2,6 +2,14 @@ from teeny_tiny_language.lexer import Lexer
 from teeny_tiny_language.token import TokenType, Token
 
 
+def test_tokentype_comparison():
+    assert TokenType.EOF == TokenType.EOF
+
+
+def test_tokentype_identity():
+    assert TokenType.EOF is TokenType.EOF
+
+
 def test_empty_current_char():
     l = Lexer("")
     assert l.current_char == "\0"
