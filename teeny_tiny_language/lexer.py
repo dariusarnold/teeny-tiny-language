@@ -1,5 +1,10 @@
 from teeny_tiny_language.token import Token, TokenType
 
+
+def is_space(char: str) -> bool:
+    return char == " " or char == "\t" or char == "\r"
+
+
 class Lexer:
 
     def __init__(self, input: str) -> None:
@@ -15,7 +20,12 @@ class Lexer:
     def next_char(self) -> None:
         self.current_pos += 1
 
+    def skip_whitespace(self) -> None:
+        while is_space(self.current_char):
+            self.next_char()
+
     def get_token(self) -> Token:
+        self.skip_whitespace()
         if self.current_char == "+":
             token = Token(TokenType.PLUS, self.current_char)
         elif self.current_char == "-":
