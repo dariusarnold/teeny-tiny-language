@@ -49,19 +49,22 @@ class Parser:
 
     # statement::= "PRINT" (expression | string) newline
     def statement(self) -> None:
-        if self.match(TokenType.PRINT):
+        if self.check_token(TokenType.PRINT):
+            self.next_token()
             print("STATEMENT-PRINT")
             if self.check_token(TokenType.STRING):
                 self.next_token()
             else:
                 self.expression()
-        elif self.match(TokenType.IF):
+        elif self.check_token(TokenType.IF):
+            print("STATEMENT-PRINT")
+            self.next_token()
             self.comparison()
             self.match(TokenType.THEN)
             self.newline()
-            self.statement()
+            while not self.check_token(TokenType.ENDIF):
+                self.statement()
             self.match(TokenType.ENDIF)
-            self.newline()
         self.newline()
 
     # comparison ::= expression("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
@@ -102,7 +105,7 @@ class Parser:
     def primary(self) -> None:
         if self.check_token(TokenType.NUMBER):
             self.next_token()
-        if self.check_token(TokenType.IDENT):
+        elif self.check_token(TokenType.IDENT):
             self.next_token()
         else:
             self.abort(f"Unexpected token {self.current_token.text}")
