@@ -30,3 +30,8 @@ class Lexer:
             token = Token(TokenType.EOF, "")
         self.next_char()
         return token
+
+    def peek(self) -> str:
+        if self.current_pos < len(self.input) - 1:
+            return self.input[self.current_pos + 1]
+        return "\0"
