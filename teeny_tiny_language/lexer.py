@@ -35,7 +35,7 @@ class Lexer:
         elif self.current_char == "/":
             token = Token(TokenType.SLASH, self.current_char)
         elif self.current_char == "\n":
-            pass
+            token = Token(TokenType.NEWLINE, self.current_char)
         elif self.current_char == "\0":
             token = Token(TokenType.EOF, "")
         self.next_char()

@@ -1,4 +1,5 @@
 from teeny_tiny_language.lexer import Lexer
+from teeny_tiny_language.token import TokenType
 
 
 def test_empty_current_char():
@@ -9,6 +10,11 @@ def test_empty_current_char():
 def test_empty_peek():
     l = Lexer("")
     assert l.peek() == "\0"
+
+
+def test_single_newline_token():
+    l = Lexer("\n")
+    assert l.get_token().type == TokenType.NEWLINE
 
 
 def test_basic_next_char():

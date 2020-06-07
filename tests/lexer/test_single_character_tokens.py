@@ -3,8 +3,9 @@ from teeny_tiny_language.token import TokenType
 
 
 def test_single_character_tokens_type():
-    input = "+-*/"
-    expected_token_types = [TokenType.PLUS, TokenType.MINUS, TokenType.ASTERISK, TokenType.SLASH]
+    input = "+-*/\n"
+    expected_token_types = [TokenType.PLUS, TokenType.MINUS, TokenType.ASTERISK,
+                            TokenType.SLASH, TokenType.NEWLINE]
     lexer = Lexer(input)
     for expected_token_type in expected_token_types:
         token = lexer.get_token()
@@ -13,10 +14,9 @@ def test_single_character_tokens_type():
 
 
 def test_single_character_tokens_type_with_space():
-    input = "+- *  /"
-    expected_token_types = [TokenType.PLUS, TokenType.MINUS,
-                            TokenType.ASTERISK,
-                            TokenType.SLASH]
+    input = "+- *  /\n"
+    expected_token_types = [TokenType.PLUS, TokenType.MINUS, TokenType.ASTERISK,
+                            TokenType.SLASH, TokenType.NEWLINE]
     lexer = Lexer(input)
     for expected_token_type in expected_token_types:
         token = lexer.get_token()
@@ -25,8 +25,8 @@ def test_single_character_tokens_type_with_space():
 
 
 def test_single_character_tokens_text():
-    input = "+-*/"
-    expected_token_texts = ["+", "-", "*", "/"]
+    input = "+-*/\n"
+    expected_token_texts = ["+", "-", "*", "/", "\n"]
     lexer = Lexer(input)
     for expected_token_text in expected_token_texts:
         token = lexer.get_token()
@@ -35,8 +35,8 @@ def test_single_character_tokens_text():
 
 
 def test_single_character_tokens_text_with_space():
-    input = "+- *  /"
-    expected_token_texts = ["+", "-", "*", "/"]
+    input = "+- *  /\n"
+    expected_token_texts = ["+", "-", "*", "/", "\n"]
     lexer = Lexer(input)
     for expected_token_text in expected_token_texts:
         token = lexer.get_token()
