@@ -1,5 +1,5 @@
 from teeny_tiny_language.lexer import Lexer
-from teeny_tiny_language.token import TokenType
+from teeny_tiny_language.token import TokenType, Token
 
 
 def test_empty_current_char():
@@ -40,3 +40,29 @@ def test_basic_peek():
         assert l.peek() == c
         l.next_char()
     assert l.peek() == "\0"
+
+
+def test_indentation_smoketest():
+    input = \
+        """\
+        WHILE a < 3 REPEAT
+            PRINT a
+            LET a = a + 1
+        ENDWHILE
+        """
+    l = Lexer(input)
+    expected_tokens = [Token(TokenType.WHILE, "WHILE"),
+                       Token(TokenType.IDENT, "a"), Token(TokenType.LT, "<"),
+                       Token(TokenType.NUMBER, "3"),
+                       Token(TokenType.REPEAT, "REPEAT"),
+                       Token(TokenType.NEWLINE, "\n"),
+                       Token(TokenType.PRINT, "PRINT"),
+                       Token(TokenType.IDENT, "a"),
+                       Token(TokenType.NEWLINE, "\n"),
+                       Token(TokenType.LET, "LET"), Token(TokenType.IDENT, "a"),
+                       Token(TokenType.EQ, "="), Token(TokenType.IDENT, "a"),
+                       Token(TokenType.PLUS, "+"), Token(TokenType.NUMBER, "1"),
+                       Token(TokenType.NEWLINE, "\n"),
+                       Token(TokenType.ENDWHILE, "ENDWHILE")]
+    for expected_token in expected_tokens:
+        assert l.get_token() == expected_token
