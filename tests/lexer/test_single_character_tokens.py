@@ -1,6 +1,7 @@
 from teeny_tiny_language.lexer import Lexer
 from teeny_tiny_language.token import TokenType
 
+
 def test_single_character_tokens():
     input = "+-*/"
     expected_token_types = [TokenType.PLUS, TokenType.MINUS, TokenType.ASTERISK, TokenType.SLASH]
