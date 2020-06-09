@@ -11,6 +11,14 @@ def test_print_hello_world(capsys):
     assert out == "".join(("PROGRAM", "STATEMENT-PRINT", "NEWLINE"))
 
 
+def test_print_hello_world_without_newline(capsys):
+    p = Parser("PRINT \"Hello world\"")
+    p.program()
+    out, err = capsys.readouterr()
+    out = out.replace("\n", "")
+    assert out == "".join(("PROGRAM", "STATEMENT-PRINT", "NEWLINE"))
+
+
 def test_multiple_print_statements(capsys):
     input = """\
 PRINT "hello, world!"

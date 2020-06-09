@@ -17,7 +17,8 @@ VALID_KEYWORDS: List[TokenType] = [t for t in TokenType if 100 < t.value < 200]
 class Lexer:
 
     def __init__(self, input: str) -> None:
-        self.input = input
+        # add trailing newline to simplify special cases in parsing
+        self.input = f"{input}\n"
         self.current_pos: int = 0
 
     @property

@@ -6,7 +6,7 @@ from teeny_tiny_language.tokens import TokenType, Token
 
 def test_empty_input_eof():
     p = Parser("")
-    assert p.check_token(TokenType.EOF)
+    assert p.check_token(TokenType.NEWLINE)
     assert p.check_peek(TokenType.EOF)
 
 
@@ -18,7 +18,7 @@ def test_next_token():
 
 
 def test_match_advances_parser():
-    p = Parser("\n")
+    p = Parser("")
     assert p.check_token(TokenType.NEWLINE)
     p.match(TokenType.NEWLINE)
     assert p.check_token(TokenType.EOF)
