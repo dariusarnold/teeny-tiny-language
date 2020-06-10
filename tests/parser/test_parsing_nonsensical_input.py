@@ -15,3 +15,9 @@ def test_goto_undeclared_label():
         p.program()
     # check if label name in undeclared label
     assert "main" in e.value.args[0]
+
+
+def test_nonsensical_comparison_operator():
+    p = Parser("IF 1 + 1 THEN\nENDIF")
+    with pytest.raises(ParserError):
+        p.program()

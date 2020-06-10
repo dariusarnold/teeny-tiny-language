@@ -117,6 +117,8 @@ class Parser:
         if is_comparison_operator(self.current_token):
             self.next_token()
             self.expression()
+        else:
+            self.abort(f"Expected comparison operator instead of {self.current_token}")
         while is_comparison_operator(self.current_token):
             self.next_token()
             self.expression()
