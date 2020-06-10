@@ -55,23 +55,33 @@ def test_break(capsys):
 
 
 def test_expression(capsys):
-    input = "LET foo = foo * 3 + 2\n"
+    input = "LET foo = 0\nLET foo = foo * 3 + 2\n"
     p = Parser(input)
     p.program()
     out, err = capsys.readouterr()
     out = out.replace("\n", "")
     assert out == "".join(("PROGRAM", "STATEMENT-LET", "EXPRESSION", "TERM", "UNARY",
-                           "PRIMARY (foo)", "UNARY", "PRIMARY (3)", "TERM", "UNARY", "PRIMARY (2)",
+                           "PRIMARY (0)", "NEWLINE", "STATEMENT-LET",
+                           "EXPRESSION", "TERM", "UNARY", "PRIMARY (foo)", "UNARY", "PRIMARY (3)",
+                           "TERM", "UNARY", "PRIMARY (2)",
                            "NEWLINE"))
+
 
 def test_expression_with_if(capsys):
     input = """\
+LET foo = 1
 LET foo = foo * 3 + 2
 IF foo > 0 THEN
   PRINT "yes!"
 ENDIF
 """
     expected_output = """PROGRAM
+STATEMENT-LET
+EXPRESSION
+TERM
+UNARY
+PRIMARY (1)
+NEWLINE
 STATEMENT-LET
 EXPRESSION
 TERM
