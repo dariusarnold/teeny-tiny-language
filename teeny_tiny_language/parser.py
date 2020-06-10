@@ -17,6 +17,10 @@ class Parser:
         self.lexer = Lexer(input)
         self.verbose = verbose
 
+        self.symbols = set()
+        self.labels_declared = set()
+        self.labels_gotoed = set()
+
         self.current_token: Token = self.lexer.get_token()
         self.peek_token: Token = self.lexer.get_token()
 
@@ -76,14 +80,20 @@ class Parser:
         elif self.check_token(TokenType.LABEL):
             print("STATEMENT-LABEL")
             self.next_token()
+            self.labels_declared.add(self.current_token.text)
             self.match(TokenType.IDENT)
         elif self.check_token(TokenType.GOTO):
             print("STATEMENT-GOTO")
             self.next_token()
+            if self.current_token.text in self.labels_declared:
+                self.labels_gotoed.add(self.current_token.text)
+            else:
+                self.abort(f"Cannot GOTO undeclared label {self.current_token.text}.")
             self.match(TokenType.IDENT)
         elif self.check_token(TokenType.LET):
             print("STATEMENT-LET")
             self.next_token()
+            self.symbols.add(self.current_token.text)
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
             self.expression()
@@ -136,6 +146,8 @@ class Parser:
         if self.check_token(TokenType.NUMBER):
             self.next_token()
         elif self.check_token(TokenType.IDENT):
+            if self.current_token.text not in self.symbols:
+                self.abort(f"Undeclared symbol {self.current_token.text}")
             self.next_token()
         else:
             self.abort(f"Unexpected token {self.current_token.type.name}")
