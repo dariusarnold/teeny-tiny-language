@@ -93,10 +93,14 @@ class Parser:
         elif self.check_token(TokenType.LET):
             print("STATEMENT-LET")
             self.next_token()
-            self.symbols.add(self.current_token.text)
+            # Store Identifier token and add it so seen symbols after the expression call, so a
+            # statement like LET a = a is invalid, because the right a will only be known in the
+            # symbol table after the whole statement is parsed.
+            identifier = self.current_token
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
             self.expression()
+            self.symbols.add(identifier.text)
         elif self.check_token(TokenType.INPUT):
             print("STATEMENT-INPUT")
             self.next_token()
