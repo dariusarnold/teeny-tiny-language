@@ -138,7 +138,7 @@ class Parser:
         elif self.check_token(TokenType.IDENT):
             self.next_token()
         else:
-            self.abort(f"Unexpected token {self.current_token.name}")
+            self.abort(f"Unexpected token {self.current_token.type.name}")
 
     # newline ::= "\n"+
     def newline(self) -> None:
