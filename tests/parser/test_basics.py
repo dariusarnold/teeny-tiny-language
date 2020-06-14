@@ -19,6 +19,13 @@ def test_swallow_consecutive_newlines():
     assert tokens == [TokenType.NEWLINE, TokenType.EOF]
 
 
+def test_warn_on_missing_final_newline():
+    p = Parser("PRINT \"test\"")
+    with pytest.raises(ParserError) as e:
+        test_helpers.exhaust(p.program())
+    test_helpers.assert_in_error_msg("NEWLINE", e)
+
+
 def test_next_token():
     p = Parser("LET a = 1")
     token1: Token = p.peek_token
