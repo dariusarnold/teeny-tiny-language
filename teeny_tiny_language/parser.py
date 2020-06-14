@@ -158,6 +158,6 @@ class Parser:
     # newline ::= "\n"+
     def newline(self) -> None:
         yield from self.match(TokenType.NEWLINE)
-        while (self.check_token(TokenType.NEWLINE)):
+        while self.check_token(TokenType.NEWLINE):
             # dont yield to swallow following newlines
             self.next_token()
