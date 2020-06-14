@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterator
 
 from teeny_tiny_language.lexer import Lexer
 from teeny_tiny_language.tokens import TokenType, Token
@@ -52,7 +52,7 @@ class Parser:
     # Production rules
 
     # program ::= {statement}
-    def program(self) -> Iterable[Token]:
+    def program(self) -> Iterator[Token]:
         while not self.check_token(TokenType.EOF):
             yield from self.statement()
         yield Token(TokenType.EOF, "")
