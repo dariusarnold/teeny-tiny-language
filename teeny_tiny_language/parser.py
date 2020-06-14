@@ -67,18 +67,18 @@ class Parser:
                 yield from self.expression()
         elif self.check_token(TokenType.IF):
             yield from self.next_token()
-            self.comparison()
+            yield from self.comparison()
             yield from self.match(TokenType.THEN)
             yield from self.newline()
             while not self.check_token(TokenType.ENDIF):
-                self.statement()
+                yield from self.statement()
             yield from self.match(TokenType.ENDIF)
         elif self.check_token(TokenType.WHILE):
             yield from self.next_token()
-            self.comparison()
+            yield from self.comparison()
             yield from self.match(TokenType.REPEAT)
             while not self.check_token(TokenType.ENDWHILE):
-                self.statement()
+                yield from self.statement()
             yield from self.match(TokenType.ENDWHILE)
         elif self.check_token(TokenType.LABEL):
             yield from self.next_token()

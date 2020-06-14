@@ -1,114 +1,92 @@
 import pytest
 
 from teeny_tiny_language.parser import Parser, ParserError
+from teeny_tiny_language.tokens import Token, TokenType
+from tests import test_helpers
 
 
-def test_print_hello_world(capsys):
+def test_yielding():
+    p = Parser("LET a = 1\n")
+    expected_tokens = [Token(TokenType.LET, "LET"), Token(TokenType.IDENT, "a"),
+                       Token(TokenType.EQ, "="), Token(TokenType.NUMBER, "1")]
+    for actual_token, expected_token in zip(p.program(), expected_tokens):
+        assert actual_token == expected_token
+
+
+def test_print_hello_world():
     p = Parser("PRINT \"Hello world\"\n")
-    p.program()
-    out, err = capsys.readouterr()
-    out = out.replace("\n", "")
-    assert out == "".join(("PROGRAM", "STATEMENT-PRINT", "NEWLINE"))
+    tokens = [t for t in p.program()]
+    assert tokens == [Token(TokenType.PRINT, "PRINT"), Token(TokenType.STRING, "Hello world"),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.EOF, "")]
 
 
-def test_print_hello_world_without_newline(capsys):
-    p = Parser("PRINT \"Hello world\"")
-    p.program()
-    out, err = capsys.readouterr()
-    out = out.replace("\n", "")
-    assert out == "".join(("PROGRAM", "STATEMENT-PRINT", "NEWLINE"))
-
-
-def test_multiple_print_statements(capsys):
+def test_multiple_print_statements():
     input = """\
 PRINT "hello, world!"
 PRINT "second line"
 PRINT "and a third..."
 """
     p = Parser(input)
-    p.program()
-    out, err = capsys.readouterr()
-    out = out.replace("\n", "")
-    assert out == "".join(("PROGRAM", "STATEMENT-PRINT", "NEWLINE", "STATEMENT-PRINT", "NEWLINE",
-                           "STATEMENT-PRINT", "NEWLINE"))
+    tokens = [t for t in p.program()]
+    print(Token(TokenType.NEWLINE, "\n"))
+    assert tokens == [Token(TokenType.PRINT, "PRINT"), Token(TokenType.STRING, "hello, world!"),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.PRINT, "PRINT"),
+                      Token(TokenType.STRING, "second line"), Token(TokenType.NEWLINE, "\n"),
+                      Token(TokenType.PRINT, "PRINT"), Token(TokenType.STRING, "and a third..."),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.EOF, "")]
 
 
-def test_loop(capsys):
+def test_loop():
     input = """\
 LABEL loop
 PRINT "hello, world!"
 GOTO loop
 """
     p = Parser(input)
-    p.program()
-    out, err = capsys.readouterr()
-    out = out.replace("\n", "")
-    assert out == "".join(("PROGRAM", "STATEMENT-LABEL", "NEWLINE", "STATEMENT-PRINT", "NEWLINE",
-                           "STATEMENT-GOTO", "NEWLINE"))
+    tokens = [t for t in p.program()]
+    assert tokens == [Token(TokenType.LABEL, "LABEL"), Token(TokenType.IDENT, "loop"),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.PRINT, "PRINT"),
+                      Token(TokenType.STRING, "hello, world!"), Token(TokenType.NEWLINE, "\n"),
+                      Token(TokenType.GOTO, "GOTO"), Token(TokenType.IDENT, "loop"),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.EOF, "")]
 
 
-def test_break(capsys):
+def test_break():
     input = "JUMP GOTO\n"
     p = Parser(input)
     with pytest.raises(ParserError):
-        p.program()
+        test_helpers.exhaust(p.program())
 
 
-def test_expression(capsys):
+def test_expression():
     input = "LET foo = 0\nLET foo = foo * 3 + 2\n"
     p = Parser(input)
-    p.program()
-    out, err = capsys.readouterr()
-    out = out.replace("\n", "")
-    assert out == "".join(("PROGRAM", "STATEMENT-LET", "EXPRESSION", "TERM", "UNARY",
-                           "PRIMARY (0)", "NEWLINE", "STATEMENT-LET",
-                           "EXPRESSION", "TERM", "UNARY", "PRIMARY (foo)", "UNARY", "PRIMARY (3)",
-                           "TERM", "UNARY", "PRIMARY (2)",
-                           "NEWLINE"))
+    tokens = [t for t in p.program()]
+    assert tokens == [Token(TokenType.LET, "LET"), Token(TokenType.IDENT, "foo"),
+                      Token(TokenType.EQ, "="), Token(TokenType.NUMBER, "0"),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.LET, "LET"),
+                      Token(TokenType.IDENT, "foo"), Token(TokenType.EQ, "="),
+                      Token(TokenType.IDENT, "foo"), Token(TokenType.ASTERISK, "*"),
+                      Token(TokenType.NUMBER, "3"), Token(TokenType.PLUS, "+"),
+                      Token(TokenType.NUMBER, "2"), Token(TokenType.NEWLINE, "\n"),
+                      Token(TokenType.EOF, "")]
 
 
-def test_expression_with_if(capsys):
+def test_expression_with_if():
     input = """\
 LET foo = 1
-LET foo = foo * 3 + 2
 IF foo > 0 THEN
   PRINT "yes!"
 ENDIF
 """
-    expected_output = """PROGRAM
-STATEMENT-LET
-EXPRESSION
-TERM
-UNARY
-PRIMARY (1)
-NEWLINE
-STATEMENT-LET
-EXPRESSION
-TERM
-UNARY
-PRIMARY (foo)
-UNARY
-PRIMARY (3)
-TERM
-UNARY
-PRIMARY (2)
-NEWLINE
-STATEMENT-IF
-COMPARISON
-EXPRESSION
-TERM
-UNARY
-PRIMARY (foo)
-EXPRESSION
-TERM
-UNARY
-PRIMARY (0)
-NEWLINE
-STATEMENT-PRINT
-NEWLINE
-NEWLINE
-"""
     p = Parser(input)
-    p.program()
-    out, err = capsys.readouterr()
-    assert out == expected_output
+    tokens = [t for t in p.program()]
+    assert tokens == [Token(TokenType.LET, "LET"), Token(TokenType.IDENT, "foo"),
+                      Token(TokenType.EQ, "="), Token(TokenType.NUMBER, "1"),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.IF, "IF"),
+                      Token(TokenType.IDENT, "foo"), Token(TokenType.GT, ">"),
+                      Token(TokenType.NUMBER, "0"), Token(TokenType.THEN, "THEN"),
+                      Token(TokenType.NEWLINE, "\n"), Token(TokenType.PRINT, "PRINT"),
+                      Token(TokenType.STRING, "yes!"), Token(TokenType.NEWLINE, "\n"),
+                      Token(TokenType.ENDIF, "ENDIF"), Token(TokenType.NEWLINE, "\n"),
+                      Token(TokenType.EOF, "")]
