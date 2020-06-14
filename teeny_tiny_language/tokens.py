@@ -40,7 +40,8 @@ class Token:
         self.text: str = text
 
     def __repr__(self):
-        return f"Token({self.type.name}, {self.text})"
+        text = repr(self.text)
+        return f"Token({self.type.name}, {text})"
 
     def __eq__(self, other: "Token") -> bool:
         return self.type == other.type and self.text == other.text
