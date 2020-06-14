@@ -1,3 +1,14 @@
+from typing import Iterator, Optional
+
+from teeny_tiny_language.tokens import TokenType, Token
+
+
+def exhaust(generator: Iterator):
+    """
+    Exhaust an Iterator without storing any elements
+    """
+    for _ in generator:
+        pass
 
 
 def assert_in_error_msg(text: str, e, compare_lowercase: bool = True):
