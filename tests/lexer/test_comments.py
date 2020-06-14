@@ -4,18 +4,18 @@ from teeny_tiny_language.tokens import TokenType
 
 def test_comment_character():
     l = Lexer("#")
-    assert l.get_token().type == TokenType.NEWLINE
+    assert l.get_token().type == TokenType.EOF
 
 
 def test_only_comment():
     l = Lexer("# comment let a = 1")
-    assert l.get_token().type == TokenType.NEWLINE
+    assert l.get_token().type == TokenType.EOF
 
 
 def test_two_comment_lines():
     l = Lexer("# comment let a = 1\n #hello")
     assert l.get_token().type == TokenType.NEWLINE
-    assert l.get_token().type == TokenType.NEWLINE
+    assert l.get_token().type == TokenType.EOF
 
 
 def test_comment_in_code():

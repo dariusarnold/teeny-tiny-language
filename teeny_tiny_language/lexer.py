@@ -18,7 +18,7 @@ class Lexer:
 
     def __init__(self, input: str) -> None:
         # add trailing newline to simplify special cases in parsing
-        self.input = f"{input}\n"
+        self.input = f"{input}"
         self.current_pos: int = 0
 
     @property

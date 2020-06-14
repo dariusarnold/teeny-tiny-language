@@ -10,9 +10,14 @@ def test_tokentype_identity():
     assert TokenType.EOF is TokenType.EOF
 
 
+def test_eof_after_lexing_end():
+    l = Lexer("")
+    assert l.get_token().type == TokenType.EOF
+
+
 def test_empty_current_char():
     l = Lexer("")
-    assert l.current_char == "\n"
+    assert l.current_char == "\0"
 
 
 def test_empty_peek():
@@ -38,7 +43,6 @@ def test_basic_next_char():
     for c in input:
         assert l.current_char == c
         l.next_char()
-    assert l.current_char == "\n"
 
 
 def test_basic_peek():
@@ -47,7 +51,6 @@ def test_basic_peek():
     for c in input[1:]:
         assert l.peek() == c
         l.next_char()
-    assert l.peek() == "\n"
 
 
 def test_indentation_smoketest():
