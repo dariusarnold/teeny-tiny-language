@@ -10,6 +10,15 @@ def test_empty_input_eof():
     assert p.check_peek(TokenType.EOF)
 
 
+@pytest.mark.timeout(1)
+def test_swallow_consecutive_newlines():
+    # This had a bug after converting the code to use yield, where it would hang, the timeout
+    # catches that.
+    p = Parser("\n\n")
+    tokens = [t.type for t in p.program()]
+    assert tokens == [TokenType.NEWLINE, TokenType.EOF]
+
+
 def test_next_token():
     p = Parser("LET a = 1")
     token1: Token = p.peek_token

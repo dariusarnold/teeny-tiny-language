@@ -160,4 +160,4 @@ class Parser:
         yield from self.match(TokenType.NEWLINE)
         while self.check_token(TokenType.NEWLINE):
             # dont yield to swallow following newlines
-            self.next_token()
+            next(self.next_token())
